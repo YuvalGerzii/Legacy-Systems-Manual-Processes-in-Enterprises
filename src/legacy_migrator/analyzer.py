@@ -4,7 +4,6 @@ import re
 from typing import Dict, List, Any
 
 from loguru import logger
-from openai import AsyncOpenAI
 
 from src.legacy_migrator.models import (
     SourceLanguage,
@@ -14,16 +13,18 @@ from src.legacy_migrator.models import (
     TranslationResult,
 )
 from src.core.config import get_settings
+from src.core.llm import get_local_llm
 
 settings = get_settings()
 
 
 class LegacyCodeAnalyzer:
-    """Analyzes legacy code for migration."""
+    """Analyzes legacy code for migration using FREE local LLMs."""
 
     def __init__(self) -> None:
-        """Initialize analyzer."""
-        self.client = AsyncOpenAI(api_key=settings.openai_api_key) if settings.openai_api_key else None
+        """Initialize analyzer with local LLM."""
+        self.llm = get_local_llm()
+        logger.info("Using LOCAL LLM - 100% Free, no API keys required!")
 
     async def analyze_code(
         self, source_code: str, source_language: SourceLanguage
@@ -174,11 +175,12 @@ class LegacyCodeAnalyzer:
 
 
 class CodeTranslator:
-    """Translates legacy code to modern languages."""
+    """Translates legacy code to modern languages using FREE local LLMs."""
 
     def __init__(self) -> None:
-        """Initialize translator."""
-        self.client = AsyncOpenAI(api_key=settings.openai_api_key) if settings.openai_api_key else None
+        """Initialize translator with local LLM."""
+        self.llm = get_local_llm()
+        logger.info("Code Translator using LOCAL LLM - 100% Free!")
 
     async def translate_code(
         self,
@@ -197,18 +199,22 @@ class CodeTranslator:
         Returns:
             TranslationResult: Translation result
         """
-        logger.info(f"Translating {source_language} to {target_language}")
+        logger.info(f"Translating {source_language} to {target_language} using LOCAL LLM")
 
-        if not self.client:
-            # Fallback: basic translation
-            translated_code = self._basic_translation(source_code, target_language)
-            confidence = 0.5
-        else:
-            # Use AI for translation
-            translated_code = await self._ai_translation(
+        # Always use local LLM (free!)
+        is_available = await self.llm.is_available()
+
+        if is_available:
+            # Use local AI for translation
+            translated_code = await self._local_llm_translation(
                 source_code, source_language, target_language
             )
             confidence = 0.85
+        else:
+            # Fallback: basic translation
+            logger.warning("Local LLM unavailable, using rule-based fallback")
+            translated_code = self._basic_translation(source_code, target_language)
+            confidence = 0.5
 
         result = TranslationResult(
             source_file="input.source",
@@ -226,13 +232,13 @@ class CodeTranslator:
         # This is a simplified placeholder
         return f"# Translated to {target.value}\n# Original code:\n# {source_code}\n\n# Translation placeholder"
 
-    async def _ai_translation(
+    async def _local_llm_translation(
         self,
         source_code: str,
         source_language: SourceLanguage,
         target_language: TargetLanguage,
     ) -> str:
-        """AI-powered code translation."""
+        """Local LLM-powered code translation (100% FREE!)."""
         prompt = f"""Translate the following {source_language.value} code to {target_language.value}.
 Ensure the translation maintains the same logic and functionality.
 Provide clean, idiomatic {target_language.value} code with proper error handling.
@@ -245,22 +251,20 @@ Source code:
 Translated code:"""
 
         try:
-            response = await self.client.chat.completions.create(
-                model=settings.openai_model,
+            translated = await self.llm.chat_completion(
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.3,
                 max_tokens=2000,
             )
 
-            translated = response.choices[0].message.content or ""
             # Extract code from markdown if present
             if "```" in translated:
-                translated = re.search(r"```(?:\w+)?\n(.*?)```", translated, re.DOTALL)
-                if translated:
-                    translated = translated.group(1)
+                code_match = re.search(r"```(?:\w+)?\n(.*?)```", translated, re.DOTALL)
+                if code_match:
+                    translated = code_match.group(1)
 
             return translated
 
         except Exception as e:
-            logger.error(f"AI translation failed: {e}")
+            logger.error(f"Local LLM translation failed: {e}")
             return self._basic_translation(source_code, target_language)

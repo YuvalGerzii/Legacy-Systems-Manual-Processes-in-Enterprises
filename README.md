@@ -2,6 +2,18 @@
 
 > Transforming legacy systems and manual processes into autonomous, AI-driven operations
 
+## 🎉 **100% FREE - No API Keys Required!**
+
+This suite uses **local, open-source LLMs** via [Ollama](https://ollama.ai/). No OpenAI, Anthropic, or other paid API subscriptions needed!
+
+- ✅ **$0.00 monthly cost** for AI inference
+- ✅ **No credit card** required
+- ✅ **Complete data privacy** - everything runs on-premises
+- ✅ **No rate limits** - process as much as your hardware allows
+- ✅ **Works offline** - after initial model download
+
+**See:** [Local LLM Verification Document](docs/LOCAL_LLM_VERIFICATION.md) for proof and details.
+
 ## 🎯 Vision
 
 Replace outdated enterprise infrastructure with a comprehensive AI-driven transformation suite that eliminates manual processes, modernizes legacy systems, and creates autonomous operational workflows.
@@ -123,56 +135,58 @@ AI-powered risk detection and prediction.
 ### Prerequisites
 - Python 3.11+
 - Docker & Docker Compose
-- PostgreSQL 15+
-- Redis 7+
-- Node.js 18+ (for frontend)
+- 16GB+ RAM recommended (8GB minimum)
+- (Optional) NVIDIA GPU for faster inference
+
+**That's it! No API keys, no credit card, no subscriptions!**
 
 ### Installation
 
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone <repository-url>
 cd Legacy-Systems-Manual-Processes-in-Enterprises
 
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Set up environment variables
+# 2. Copy environment configuration (NO API KEYS NEEDED!)
 cp .env.example .env
-# Edit .env with your configuration
 
-# Start services with Docker Compose
+# 3. Start all services (including FREE local LLM)
 docker-compose up -d
 
-# Run database migrations
-python -m alembic upgrade head
+# 4. Wait for services to start (30 seconds)
+sleep 30
 
-# Start the API server
-python -m src.main
+# 5. Download FREE AI models
+./scripts/setup_local_llms.sh
+# Or use Python version:
+# python scripts/setup_local_llms.py
+
+# 6. Access the API
+open http://localhost:8000/docs
 ```
+
+**That's it! No API keys to configure!**
 
 ### Configuration
 
-Configure the suite by editing `.env`:
+The `.env` file is pre-configured for local-only operation. **No API keys needed!**
 
 ```env
-# Database
-DATABASE_URL=postgresql://user:pass@localhost:5432/enterprise_ai
+# LOCAL LLM (100% FREE!)
+OLLAMA_URL=http://ollama:11434
+OLLAMA_MODEL=llama3.2:3b
+LLM_MODE=local  # Uses FREE local models
 
-# Redis
-REDIS_URL=redis://localhost:6379
+# All other services pre-configured
+DATABASE_URL=postgresql://...  # Already set
+REDIS_URL=redis://...          # Already set
+QDRANT_URL=http://...          # Already set
 
-# AI Models
-OPENAI_API_KEY=your-key-here
-ANTHROPIC_API_KEY=your-key-here
-
-# Vector Database
-QDRANT_URL=http://localhost:6333
-
-# Monitoring
-PROMETHEUS_ENABLED=true
-GRAFANA_ENABLED=true
+# OpenAI/Anthropic keys are OPTIONAL and NOT USED in local mode
+OPENAI_API_KEY=  # Leave empty for FREE operation!
 ```
+
+**Pro tip:** You can use the system immediately without editing `.env` - everything works out of the box!
 
 ## 📁 Project Structure
 

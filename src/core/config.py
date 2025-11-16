@@ -62,7 +62,12 @@ class Settings(BaseSettings):
     celery_broker_url: str = "amqp://admin:admin@localhost:5672/"
     celery_result_backend: str = "redis://localhost:6379/1"
 
-    # AI Models
+    # Local LLM Configuration (FREE - No API keys needed!)
+    ollama_url: str = "http://ollama:11434"
+    ollama_model: str = "llama3.2:3b"  # Fast, efficient model
+    ollama_embedding_model: str = "nomic-embed-text"  # Local embeddings
+
+    # Legacy API support (optional - NOT REQUIRED)
     openai_api_key: str = ""
     openai_model: str = "gpt-4-turbo-preview"
     openai_embedding_model: str = "text-embedding-3-large"
@@ -72,6 +77,9 @@ class Settings(BaseSettings):
 
     cohere_api_key: str = ""
     huggingface_api_key: str = ""
+
+    # LLM Mode: "local" (free) or "api" (requires keys)
+    llm_mode: str = "local"
 
     # AI Configuration
     max_tokens: int = 4000

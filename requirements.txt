@@ -4,12 +4,10 @@ uvicorn[standard]==0.27.0
 pydantic==2.5.3
 pydantic-settings==2.1.0
 
-# AI & ML
-openai==1.10.0
-anthropic==0.8.1
+# AI & ML (LOCAL ONLY - NO PAID APIs!)
+# NOTE: OpenAI/Anthropic dependencies REMOVED - using free local LLMs via Ollama
 langchain==0.1.4
 langchain-community==0.0.16
-langchain-openai==0.0.3
 llama-index==0.9.48
 transformers==4.37.0
 torch==2.1.2

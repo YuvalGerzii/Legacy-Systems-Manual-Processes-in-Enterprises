@@ -161,6 +161,26 @@ services:
     networks:
       - enterprise-network
 
+  # Ollama (Local LLM Runtime - FREE, NO API KEYS NEEDED)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: enterprise-ai-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - enterprise-network
+    restart: unless-stopped
+    # GPU support (optional - remove if no GPU)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
   # Main API Service
   api:
     build:
@@ -183,6 +203,8 @@ services:
       qdrant:
         condition: service_started
       neo4j:
+        condition: service_started
+      ollama:
         condition: service_started
     networks:
       - enterprise-network
@@ -233,6 +255,7 @@ volumes:
   rabbitmq_data:
   prometheus_data:
   grafana_data:
+  ollama_data:
 
 networks:
   enterprise-network:
