@@ -14,14 +14,15 @@ This suite uses **local, open-source LLMs** via [Ollama](https://ollama.ai/). No
 - ✅ **Production-ready** with caching, monitoring, and scaling
 
 **NEW!** 🚀 Enhanced with:
+- **Intelligent Agent Framework** - 5 specialized AI agents for legacy modernization
 - **Response caching** - 50-80% performance improvement
 - **Streaming support** - Real-time responses
 - **Batch processing** - Process 1000s of items efficiently
-- **CLI tool** - Manage models from command line
+- **CLI tool** - Manage models and run agents from command line
 - **LLM monitoring API** - Track usage and cost savings
 - **Production deployment guide** - Deploy at enterprise scale
 
-**See:** [Local LLM Verification](docs/LOCAL_LLM_VERIFICATION.md) | [Production Deployment](docs/PRODUCTION_DEPLOYMENT.md)
+**See:** [Intelligent Agents](docs/AGENTS.md) | [Local LLM Verification](docs/LOCAL_LLM_VERIFICATION.md) | [Production Deployment](docs/PRODUCTION_DEPLOYMENT.md)
 
 ## 🎯 Vision
 
@@ -115,19 +116,25 @@ Intelligent multi-cloud and legacy network management.
 - Chaos testing for resilience
 - Legacy API compatibility
 
-### I. Agentic Operations Suite
-Autonomous agents for enterprise workflows.
+### I. Intelligent Agent Framework
+5 specialized AI agents for legacy system modernization and transformation.
 
-**Use Cases:**
-- Vendor management
-- Procurement automation
-- Document drafting
-- Reporting and analytics
-- Contract renewals
-- Risk analysis
-- Project management
-- Invoice reviews
-- Financial close automation
+**Agents:**
+1. **Legacy Discovery Agent** - Scans codebases for legacy technologies, patterns, and risks
+2. **Code Quality Agent** - Assesses code quality, complexity, and identifies improvements
+3. **Technical Debt Agent** - Quantifies technical debt in hours and dollars with ROI prioritization
+4. **Security Auditor Agent** - Identifies OWASP Top 10 vulnerabilities and security risks
+5. **Modernization Advisor Agent** - Creates comprehensive migration plans with cost estimates
+
+**Capabilities:**
+- CLI commands for quick analysis (`python cli.py agents discover --path .`)
+- RESTful API endpoints for integration (`/api/v1/agents/workflow/comprehensive`)
+- Python SDK for programmatic access
+- Multi-agent orchestration for complex workflows
+- AI-powered insights using 100% FREE local LLMs
+- Comprehensive reporting with actionable recommendations
+
+**See:** [Agent Framework Documentation](docs/AGENTS.md)
 
 ### J. Enterprise Risk Radar
 AI-powered risk detection and prediction.
