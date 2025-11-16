@@ -13,6 +13,7 @@ from src.api.routes import (
     infrastructure,
     agents,
     risk_radar,
+    llm_monitoring,
 )
 
 router = APIRouter()
@@ -28,3 +29,4 @@ router.include_router(hitl_hub.router, prefix="/hitl", tags=["Human-in-the-Loop"
 router.include_router(infrastructure.router, prefix="/infrastructure", tags=["Infrastructure"])
 router.include_router(agents.router, prefix="/agents", tags=["Agents"])
 router.include_router(risk_radar.router, prefix="/risk", tags=["Risk Radar"])
+router.include_router(llm_monitoring.router, prefix="/llm", tags=["LLM Monitoring"])
